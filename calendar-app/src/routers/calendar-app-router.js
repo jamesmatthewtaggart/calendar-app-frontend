@@ -8,6 +8,7 @@ const CalendarAppRouter = () => {
     <BrowserRouter>
       <Switch>
         <Route path='/' component={Calendar} exact />
+        <Route path='/event/create' component={Event} exact />
         <Route path='/event/update/:id' component={Event} exact />
         <Route component={NotFound} />
       </Switch>

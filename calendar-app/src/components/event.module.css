@@ -1,0 +1,22 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+}
+
+.gridItem {
+  padding: 3rem;
+}
+
+.inline {
+  display: flex;
+}
+
+.inlineItem {
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+}
+
+.dates {
+  grid-row-start: 2;
+  grid-column-start: 2;
+}
