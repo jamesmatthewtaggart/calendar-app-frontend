@@ -7,10 +7,10 @@ const eventsReducer = (state, action) => {
         ...state,
         { id: action.id, title: action.title, start: action.start, end: action.end }
       ]
-    case 'EDIT_NOTE':
+    case 'EDIT_EVENT':
       state[state.findIndex((event) => event.id === action.id)] = { id: action.id, title: action.title, start: action.start, end: action.end }
       return state
-    case 'REMOVE_NOTE':
+    case 'REMOVE_EVENT':
       return state.filter((event) => action.id !== event.id)
     default:
       return state
