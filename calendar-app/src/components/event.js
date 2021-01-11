@@ -135,7 +135,7 @@ const Event = (props) => {
     }
   }
 
-  const setEvent = () => {
+  const setEvent = async () => {
     console.log(events)
     console.log(eventId)
     const found = events.find((event) => {
@@ -145,6 +145,26 @@ const Event = (props) => {
       setTitle(found.title)
       setStart(found.start)
       setEnd(found.end)
+    } else {
+      try {
+        const apiResponse = await fetch(
+          `http://127.0.0.1:8000/events/${eventId}/`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+        if (apiResponse.ok) {
+          const data = await apiResponse.json()
+          setTitle(data.title)
+          setStart(moment(data.start).toDate())
+          setEnd(moment(data.end).toDate())
+        }
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 
@@ -172,10 +192,14 @@ const Event = (props) => {
       console.log('date check')
       const newEventRange = moment.range(start, end)
       const overlap = events.find((event, index) => {
-        console.log(newEventRange)
-        const eventRange = moment.range(event.start, event.end)
-        console.log(eventRange)
-        return newEventRange.overlaps(eventRange)
+        if (!eventId === event.id) {
+          console.log(newEventRange)
+          const eventRange = moment.range(event.start, event.end)
+          console.log(eventRange)
+          return newEventRange.overlaps(eventRange)
+        } else {
+          return false
+        }
       })
       console.log(overlap)
       if (overlap) {

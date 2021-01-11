@@ -31,7 +31,9 @@ const CalendarAppCalendar = () => {
         const data = await apiResponse.json()
         const newEvents = data.map(eventMap)
         console.log(newEvents)
-        dispatch({ type: 'POPULATE_EVENTS', events: newEvents })
+        if (!arrayEqual(events, newEvents)) {
+          dispatch({ type: 'POPULATE_EVENTS', events: newEvents })
+        }
       }
     } catch (e) {
       console.log(e)
@@ -42,6 +44,18 @@ const CalendarAppCalendar = () => {
     eventListApi()
     console.log('use effect ran')
   }, [])
+
+  const arrayEqual = (a, b) => {
+    return (Array.isArray(a) &&
+        Array.isArray(b) &&
+        a.length === b.length &&
+        a.every((val, index) => val === b[index]))
+  }
+
+  useEffect(() => {
+    eventListApi()
+    console.log('use effect ran update events')
+  }, [events])
 
   console.log('rerendered')
   console.log(events)
