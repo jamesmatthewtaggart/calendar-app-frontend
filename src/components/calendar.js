@@ -26,12 +26,11 @@ const CalendarAppCalendar = () => {
 
   const eventListApi = async () => {
     try {
-      const apiResponse = await fetch('http://127.0.0.1:8000/events/')
+      const apiResponse = await fetch('https://james-calendar-app-backend.herokuapp.com/events/')
       if (apiResponse.ok) {
         const data = await apiResponse.json()
         const newEvents = data.map(eventMap)
-        console.log(newEvents)
-        if (!arrayEqual(events, newEvents)) {
+        if (JSON.stringify(events) !== JSON.stringify(newEvents)) {
           dispatch({ type: 'POPULATE_EVENTS', events: newEvents })
         }
       }
@@ -42,23 +41,8 @@ const CalendarAppCalendar = () => {
 
   useEffect(() => {
     eventListApi()
-    console.log('use effect ran')
-  }, [])
-
-  const arrayEqual = (a, b) => {
-    return (Array.isArray(a) &&
-        Array.isArray(b) &&
-        a.length === b.length &&
-        a.every((val, index) => val === b[index]))
-  }
-
-  useEffect(() => {
-    eventListApi()
-    console.log('use effect ran update events')
+    console.log('effect ran')
   }, [events])
-
-  console.log('rerendered')
-  console.log(events)
 
   return (
     <main className={styles.grid}>

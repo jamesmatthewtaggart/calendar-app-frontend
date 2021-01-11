@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.1.10",
     "moment": "^2.29.1",
     "moment-range": "^4.0.2",
+    "netlify-cli": "^3.0.0",
     "react": "^17.0.1",
     "react-big-calendar": "^0.30.0",
     "react-datepicker": "^3.4.0",

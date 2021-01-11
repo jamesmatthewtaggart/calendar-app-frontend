@@ -35,11 +35,9 @@ const Event = (props) => {
       start: moment(start).utc(),
       end: moment(end).utc()
     }
-    console.log('Data to send.')
-    console.log(data)
     try {
       const apiResponse = await fetch(
-        'http://127.0.0.1:8000/events/',
+        'https://james-calendar-app-backend.herokuapp.com/events/',
         {
           method: 'POST',
           headers: {
@@ -64,11 +62,9 @@ const Event = (props) => {
       start,
       end
     }
-    console.log('Data to send.')
-    console.log(data)
     try {
       const apiResponse = await fetch(
-        `http://127.0.0.1:8000/events/${eventId}/`,
+        `https://james-calendar-app-backend.herokuapp.com/events/${eventId}/`,
         {
           method: 'PUT',
           headers: {
@@ -87,11 +83,9 @@ const Event = (props) => {
   }
 
   const deleteEventApi = async () => {
-    console.log('Delete id.')
-    console.log(eventId)
     try {
       const apiResponse = await fetch(
-        `http://127.0.0.1:8000/events/${eventId}/`,
+        `https://james-calendar-app-backend.herokuapp.com/events/${eventId}/`,
         {
           method: 'DELETE',
           headers: {
@@ -100,8 +94,7 @@ const Event = (props) => {
         }
       )
       if (apiResponse.ok) {
-        const data = await apiResponse.json()
-        dispatch({ type: 'REMOVE_EVENT', id: data.id })
+        dispatch({ type: 'REMOVE_EVENT', id: `${eventId}` })
       }
     } catch (e) {
       console.log(e)
@@ -136,8 +129,6 @@ const Event = (props) => {
   }
 
   const setEvent = async () => {
-    console.log(events)
-    console.log(eventId)
     const found = events.find((event) => {
       return `${eventId}` === `${event.id}`
     })
@@ -148,7 +139,7 @@ const Event = (props) => {
     } else {
       try {
         const apiResponse = await fetch(
-          `http://127.0.0.1:8000/events/${eventId}/`,
+          `https://james-calendar-app-backend.herokuapp.com/events/${eventId}/`,
           {
             method: 'GET',
             headers: {
@@ -189,19 +180,15 @@ const Event = (props) => {
       alert('Start before today')
       return false
     } else {
-      console.log('date check')
       const newEventRange = moment.range(start, end)
       const overlap = events.find((event, index) => {
-        if (!eventId === event.id) {
-          console.log(newEventRange)
+        if (eventId !== event.id.toString()) {
           const eventRange = moment.range(event.start, event.end)
-          console.log(eventRange)
           return newEventRange.overlaps(eventRange)
         } else {
           return false
         }
       })
-      console.log(overlap)
       if (overlap) {
         alert('New event overlaps a existing.')
         return false

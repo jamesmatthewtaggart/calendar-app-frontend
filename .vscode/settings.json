@@ -1,4 +1,4 @@
 {
     "editor.tabSize": 2,
-    "terminal.integrated.cwd": "${workspaceFolder}/calendar-app"
+    "git.ignoreLimitWarning": true,
 }
