@@ -41,7 +41,7 @@ const Event = (props) => {
         {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify(data)
         }
@@ -49,6 +49,8 @@ const Event = (props) => {
       if (apiResponse.ok) {
         const data = await apiResponse.json()
         dispatch({ type: 'ADD_EVENT', id: data.id, title: data.title, start: moment(start).toDate(), end: moment(end).toDate() })
+        reset()
+        calendarRedirect()
       }
     } catch (e) {
       console.log(e)
@@ -56,7 +58,7 @@ const Event = (props) => {
   }
 
   const updateEventApi = async () => {
-    const data = {
+    const updateEventData = {
       id: eventId,
       title,
       start,
@@ -68,14 +70,16 @@ const Event = (props) => {
         {
           method: 'PUT',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify(updateEventData)
         }
       )
       if (apiResponse.ok) {
         const data = await apiResponse.json()
-        dispatch({ type: 'EDIT_EVENT', id: data.id, title: data.title, start: moment(data.start).toDate(), end: moment(data.end).toDate() })
+        dispatch({ type: 'EDIT_EVENT', id: data.id, title: updateEventData.title, start: moment(updateEventData.start).toDate(), end: moment(updateEventData.end).toDate() })
+        reset()
+        calendarRedirect()
       }
     } catch (e) {
       console.log(e)
@@ -89,12 +93,14 @@ const Event = (props) => {
         {
           method: 'DELETE',
           headers: {
-            'Content-Type': 'application/json',
-          },
+            'Content-Type': 'application/json'
+          }
         }
       )
       if (apiResponse.ok) {
         dispatch({ type: 'REMOVE_EVENT', id: `${eventId}` })
+        reset()
+        calendarRedirect()
       }
     } catch (e) {
       console.log(e)
@@ -114,8 +120,6 @@ const Event = (props) => {
     const valid = dateChecks()
     if (valid) {
       createEventApi()
-      reset()
-      calendarRedirect()
     }
   }
 
@@ -123,8 +127,6 @@ const Event = (props) => {
     const valid = dateChecks()
     if (valid) {
       updateEventApi()
-      reset()
-      calendarRedirect()
     }
   }
 
@@ -143,8 +145,8 @@ const Event = (props) => {
           {
             method: 'GET',
             headers: {
-              'Content-Type': 'application/json',
-            },
+              'Content-Type': 'application/json'
+            }
           }
         )
         if (apiResponse.ok) {
@@ -152,6 +154,7 @@ const Event = (props) => {
           setTitle(data.title)
           setStart(moment(data.start).toDate())
           setEnd(moment(data.end).toDate())
+          dispatch({ type: 'EDIT_EVENT', id: data.id, title: data.title, start: moment(data.start).toDate(), end: moment(data.end).toDate() })
         }
       } catch (e) {
         console.log(e)
@@ -161,8 +164,6 @@ const Event = (props) => {
 
   const deleteEvent = () => {
     deleteEventApi()
-    reset()
-    calendarRedirect()
   }
 
   const dateChecks = () => {

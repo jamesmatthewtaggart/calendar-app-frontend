@@ -30,9 +30,7 @@ const CalendarAppCalendar = () => {
       if (apiResponse.ok) {
         const data = await apiResponse.json()
         const newEvents = data.map(eventMap)
-        if (JSON.stringify(events) !== JSON.stringify(newEvents)) {
-          dispatch({ type: 'POPULATE_EVENTS', events: newEvents })
-        }
+        dispatch({ type: 'POPULATE_EVENTS', events: newEvents })
       }
     } catch (e) {
       console.log(e)
@@ -42,12 +40,12 @@ const CalendarAppCalendar = () => {
   useEffect(() => {
     eventListApi()
     console.log('effect ran')
-  }, [events])
+  }, ['events'])
 
   return (
     <main className={styles.grid}>
       <div className={styles.gridItem}>
-        <Link to='/event/create'>Create</Link>
+        <Link to='/event/create'>Create Event</Link>
       </div>
       <div className={styles.gridItem}>
         <Calendar
