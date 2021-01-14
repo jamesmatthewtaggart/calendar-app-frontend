@@ -26,7 +26,7 @@ const CalendarAppCalendar = () => {
 
   const eventListApi = async () => {
     try {
-      const apiResponse = await fetch('https://james-calendar-app-backend.herokuapp.com/events/')
+      const apiResponse = await fetch(`${process.env.REACT_APP_API}/events/`)
       if (apiResponse.ok) {
         const data = await apiResponse.json()
         const newEvents = data.map(eventMap)

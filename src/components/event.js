@@ -37,7 +37,7 @@ const Event = (props) => {
     }
     try {
       const apiResponse = await fetch(
-        'https://james-calendar-app-backend.herokuapp.com/events/',
+        `${process.env.REACT_APP_API}/events/`,
         {
           method: 'POST',
           headers: {
@@ -66,7 +66,7 @@ const Event = (props) => {
     }
     try {
       const apiResponse = await fetch(
-        `https://james-calendar-app-backend.herokuapp.com/events/${eventId}/`,
+        `${process.env.REACT_APP_API}/events/${eventId}/`,
         {
           method: 'PUT',
           headers: {
@@ -89,7 +89,7 @@ const Event = (props) => {
   const deleteEventApi = async () => {
     try {
       const apiResponse = await fetch(
-        `https://james-calendar-app-backend.herokuapp.com/events/${eventId}/`,
+        `${process.env.REACT_APP_API}/events/${eventId}/`,
         {
           method: 'DELETE',
           headers: {
@@ -141,7 +141,7 @@ const Event = (props) => {
     } else {
       try {
         const apiResponse = await fetch(
-          `https://james-calendar-app-backend.herokuapp.com/events/${eventId}/`,
+          `${process.env.REACT_APP_API}/events/${eventId}/`,
           {
             method: 'GET',
             headers: {
