@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import styles from './event.module.css'
 import EventsContext from '../context/events-context'
+import { eventFetchApi } from '../services/calendar-app-services'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import Moment from 'moment'
@@ -21,9 +22,33 @@ const Event = (props) => {
 
   useEffect(() => {
     if (isUpdate) {
-      setEvent()
+      findEvent()
     }
   }, [])
+
+  const findEvent = async () => {
+    const found = events.find((event) => {
+      return `${eventId}` === `${event.id}`
+    })
+    if (found) {
+      setEvent(found.title, found.start, found.end)
+    } else {
+      eventFetchApi(eventId).then(
+        (data) => {
+          if (data) {
+            setEvent(data.title, moment(data.start).toDate(), moment(data.end).toDate())
+            dispatch({ type: 'EDIT_EVENT', id: data.id, title: data.title, start: moment(data.start).toDate(), end: moment(data.end).toDate() })
+          }
+        }
+      )
+    }
+  }
+
+  const setEvent = (title, start, end) => {
+    setTitle(title)
+    setStart(start)
+    setEnd(end)
+  }
 
   const calendarRedirect = () => {
     history.push('/')
@@ -127,38 +152,6 @@ const Event = (props) => {
     const valid = dateChecks()
     if (valid) {
       updateEventApi()
-    }
-  }
-
-  const setEvent = async () => {
-    const found = events.find((event) => {
-      return `${eventId}` === `${event.id}`
-    })
-    if (found) {
-      setTitle(found.title)
-      setStart(found.start)
-      setEnd(found.end)
-    } else {
-      try {
-        const apiResponse = await fetch(
-          `${process.env.REACT_APP_API}/events/${eventId}/`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          }
-        )
-        if (apiResponse.ok) {
-          const data = await apiResponse.json()
-          setTitle(data.title)
-          setStart(moment(data.start).toDate())
-          setEnd(moment(data.end).toDate())
-          dispatch({ type: 'EDIT_EVENT', id: data.id, title: data.title, start: moment(data.start).toDate(), end: moment(data.end).toDate() })
-        }
-      } catch (e) {
-        console.log(e)
-      }
     }
   }
 
